@@ -2,6 +2,10 @@ package raycaster.tests
 
 import org.scalatest._
 import raycaster.math.Vec2
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
 class Vec2Test extends FlatSpec with Matchers {
 
   "*" should "multiply vector with the given coefficient" in {
