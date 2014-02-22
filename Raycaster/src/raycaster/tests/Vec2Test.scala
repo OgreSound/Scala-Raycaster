@@ -4,6 +4,7 @@ import org.scalatest._
 import raycaster.math.Vec2
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import raycaster.math.Vec2
 
 @RunWith(classOf[JUnitRunner])
 class Vec2Test extends FlatSpec with Matchers {
@@ -33,8 +34,9 @@ class Vec2Test extends FlatSpec with Matchers {
     
     val sum = vector1 + vector2
     
-    assert(sum.x == 5)
-    assert(sum.y == 5)
+//    assert(sum.x == 5)
+//    assert(sum.y == 5)
+    assert(sum == Vec2(5,5))
   }
   
   "-" should "should subtract vector2 from vector1" in {
@@ -48,7 +50,8 @@ class Vec2Test extends FlatSpec with Matchers {
     
     val substraction = vector1 - vector2
     
-    assert(substraction.x == 3)
-    assert(substraction.y == 1)
+//    assert(substraction.x == 3)
+//    assert(substraction.y == 1)
+    assert(substraction == Vec2(3,1))
   }
 }

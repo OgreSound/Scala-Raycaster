@@ -5,16 +5,16 @@ package raycaster.math
 
 /**
  * Represents a 2x2 matrix
- * 
+ *
  * [x1 x2]
  * [y1 y2]
- * 
+ *
  * Used for transforming vectors
- * 
+ *
  * @author Vuorjoki Aleksi
  *
  */
-class Trans2(val x1: Float, val x2: Float, val y1: Float, val y2: Float) {
+case class Trans2(x1: Float, x2: Float, y1: Float, y2: Float) {
 
   def *(vector: Vec2): Vec2 = {
     val newX = this.x1 * vector.x + this.x2 * vector.y
@@ -34,4 +34,6 @@ class Trans2(val x1: Float, val x2: Float, val y1: Float, val y2: Float) {
     val newY2 = this.y1 * trans.x2 + this.y2 * trans.y2
     new Trans2(newX1, newX2, newY1, newY2)
   }
+
+  override def toString = " " + x1 + "\t" + x2 + "\n " + y1 + "\t" + y2
 }

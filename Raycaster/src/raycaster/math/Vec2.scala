@@ -6,7 +6,7 @@ package raycaster.math
  * @author Vuorjoki Aleksi
  *
  */
-class Vec2(val x: Float, val y: Float) {
+case class Vec2( x: Float,  y: Float) {
 
   /**
    * Returns new vector that is this vector multiplied by the given coefficient
@@ -40,4 +40,6 @@ class Vec2(val x: Float, val y: Float) {
   def -(vector: Vec2): Vec2 = {
     new Vec2(this.x - vector.x , this.y - vector.y)
   }
+  
+  override def toString = this.x + " " + this.y
 }
