@@ -15,9 +15,12 @@ import scala.math._
  */
 class Renderer(private var w: Int, private var h: Int, private var mapFile: File) {
   private var map = new Map(mapFile)
-  val pos = Vec2(1f, 1f)
-  val dir = Vec2(1, 1)
+  
+  val player = new Player
+  def pos = player.position
+  def dir = player.direction
   def plane = Vec2(-dir.y, dir.x)
+  
 
   def render(g: Graphics2D): BufferedImage = {
     val img = new BufferedImage(w, h, TYPE_INT_ARGB)
@@ -78,7 +81,7 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
       } else {
         correctDist = abs((mapY - rayPos.y + (1 - stepY) / 2) / rayDir.y)
       }
-      val sliceHeight = abs(h/correctDist).toInt
+      val sliceHeight = abs((h)/correctDist).toInt
       
       val drawStart = max(-sliceHeight / 2 + h / 2,0)
       val drawEnd = min(sliceHeight / 2 + h / 2,h)
@@ -95,6 +98,7 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
       }else gr.setColor(color)
       
       gr.drawLine(x, drawStart, x, drawEnd)
+      
     }
     img
   }

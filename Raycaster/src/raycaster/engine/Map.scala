@@ -51,7 +51,7 @@ class Map(file: File) {
     case mfe: MapFormatException => mfe.printStackTrace()
   }
 
-  def gridVector = grid.map(_.toVector).toVector
+  def gridVector = grid.map(_.toVector).toVector.reverse
 
   private def readAttribute(line: String): Int = {
     println(line)

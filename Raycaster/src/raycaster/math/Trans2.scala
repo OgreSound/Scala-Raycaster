@@ -34,6 +34,14 @@ case class Trans2(x1: Float, x2: Float, y1: Float, y2: Float) {
     val newY2 = this.y1 * trans.x2 + this.y2 * trans.y2
     new Trans2(newX1, newX2, newY1, newY2)
   }
+  def *(factor: Double): Trans2 = {
+    val f = factor.toFloat
+    val newX1 = this.x1 * f
+    val newX2 = this.x2 * f
+    val newY1 = this.y1 * f
+    val newY2 = this.y2 * f
+    new Trans2(newX1, newX2, newY1, newY2)
+  }
 
   override def toString = " " + x1 + "\t" + x2 + "\n " + y1 + "\t" + y2
 }
