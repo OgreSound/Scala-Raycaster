@@ -15,19 +15,19 @@ import scala.math._
  */
 class Renderer(private var w: Int, private var h: Int, private var mapFile: File) {
   private var map = new Map(mapFile)
-  
+  def world = map
   val player = new Player
   def pos = player.position
   def dir = player.direction
   def plane = Vec2(-dir.y, dir.x)
-  
 
   def render(g: Graphics2D): BufferedImage = {
     val img = new BufferedImage(w, h, TYPE_INT_ARGB)
     val gr = img.createGraphics()
     gr.setColor(Color.black)
     gr.fillRect(0, 0, w, h)
-    for (x <- 0 until w) {
+    var x = 0
+    while (x < w) {
       val cameraX: Float = 2f * x / w - 1
       val rayPos = Vec2(pos.x, pos.y)
       val rayDir = dir + (plane * cameraX)
@@ -81,24 +81,31 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
       } else {
         correctDist = abs((mapY - rayPos.y + (1 - stepY) / 2) / rayDir.y)
       }
-      val sliceHeight = abs((h)/correctDist).toInt
-      
-      val drawStart = max(-sliceHeight / 2 + h / 2,0)
-      val drawEnd = min(sliceHeight / 2 + h / 2,h)
-      val color = map.gridVector(mapX)(mapY) match {
+      val sliceHeight = abs((h) / correctDist).toInt
+
+      val drawStart = max(-sliceHeight / 2 + h / 2, 0)
+      val drawEnd = min(sliceHeight / 2 + h / 2, h)
+      var color = map.gridVector(mapX)(mapY) match {
         case 1 => Color.red
         case 2 => Color.green
         case 3 => Color.blue
         case 4 => Color.orange
         case 5 => Color.yellow
       }
-      if(side){
-        gr.setColor(color.darker)
-        
-      }else gr.setColor(color)
-      
+       if (side) {
+        color = color.brighter()
+      } else {
+        color = color.darker()
+      }
+      var components = color.getComponents(Array(0f, 0f, 0f, 0f))
+
+      components = components.map(float => max(0, min(1, float * ((1 / correctDist) * 2))))
+
+      color = new Color(components(0), components(1), components(2))
+     
+      gr.setColor(color)
       gr.drawLine(x, drawStart, x, drawEnd)
-      
+      x += 1
     }
     img
   }

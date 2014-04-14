@@ -37,7 +37,7 @@ class Map(file: File) {
       val len = line.length()
       count += 1
       if (len != row.length) {
-        throw MapFormatException(count + ". row (" + line +") too short " + len + " != " + row.length)
+        throw MapFormatException(count + ". row (" + line + ") too short " + len + " != " + row.length)
       }
       for (i <- 0 until row.length) {
         if (line(i).isDigit) {
@@ -51,7 +51,7 @@ class Map(file: File) {
     case mfe: MapFormatException => mfe.printStackTrace()
   }
 
-  def gridVector = grid.map(_.toVector).toVector.reverse
+  def gridVector = grid.map(_.toVector).toVector
 
   private def readAttribute(line: String): Int = {
     println(line)
@@ -60,6 +60,18 @@ class Map(file: File) {
     val value = line.takeRight(line.length() - 2)
     require(value.forall(_.isDigit))
     value.toInt
+  }
+
+  def changeTile(x: Int, y: Int) = {
+    if (x > 0 && x < 20 && y > 0 && y < 20) {
+      if (grid(x)(y) >= 1) {
+
+        grid(x).update(y, 0)
+      } else {
+
+        grid(x).update(y, 1)
+      }
+    }
   }
 
 }

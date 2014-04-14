@@ -35,11 +35,11 @@ class Player {
       pos += dir*(-moveSpeed.toFloat)
     }
     if(left){
-      println(dir)
+      
       dir = rotationL*dir
     }
     if(right){
-      println(dir)
+      
       dir = rotationR*dir
     }
   }

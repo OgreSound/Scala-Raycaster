@@ -11,6 +11,7 @@ import java.awt.Dimension
 import java.io.File
 import javax.swing.Timer
 import scala.swing.event._
+import raycaster.engine.Map
 
 /**
  * @author OgreSound
@@ -57,5 +58,13 @@ class RaycasterPanel(val w: Int, val h: Int, val mapFile: File) extends Panel {
     case KeyReleased(_, Key.Down, _, _) => down = false
     case KeyReleased(_, Key.Left, _, _) =>  left = false
     case KeyReleased(_, Key.Right, _, _) =>  right = false
+    case KeyPressed(_,Key.E,_,_) =>{ 
+      val p = renderer.player
+      val v = p.position+p.direction
+      
+      renderer.world.changeTile(v.x.toInt, v.y.toInt)
+      
+     
+    }
   }
 }
