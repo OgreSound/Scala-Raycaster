@@ -54,6 +54,7 @@ class Map(file: File) {
   def gridVector = grid.map(_.toVector).toVector
 
   private def readAttribute(line: String): Int = {
+    println(line)
     require(line(0).isLetter)
     require(!line(1).isLetterOrDigit)
     val value = line.takeRight(line.length() - 2)
