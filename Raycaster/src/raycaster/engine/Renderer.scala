@@ -15,8 +15,9 @@ import scala.math._
  */
 class Renderer(private var w: Int, private var h: Int, private var mapFile: File) {
   private var map = new Map(mapFile)
-  def world = map
-  val player = new Player
+  val world = map
+  val player = new Player(this)
+  
   def pos = player.position
   def dir = player.direction
   def plane = Vec2(-dir.y, dir.x)
@@ -92,17 +93,17 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
         case 4 => Color.orange
         case 5 => Color.yellow
       }
-       if (side) {
-        color = color.brighter()
-      } else {
-        color = color.darker()
-      }
+      
       var components = color.getComponents(Array(0f, 0f, 0f, 0f))
 
       components = components.map(float => max(0, min(1, float * ((1 / correctDist) * 2))))
 
       color = new Color(components(0), components(1), components(2))
-     
+      if (side) {
+        color = color.brighter()
+      } else {
+        color = color.darker()
+      }
       gr.setColor(color)
       gr.drawLine(x, drawStart, x, drawEnd)
       x += 1

@@ -6,6 +6,7 @@ package raycaster.engine
 import java.io.File
 import java.util.Scanner
 import scala.util.Try
+import raycaster.math.Vec2
 /**
  *
  *
@@ -73,5 +74,7 @@ class Map(file: File) {
       }
     }
   }
+  
+  def inWall(pos: Vec2) = grid(pos.x.toInt)(pos.y.toInt) != 0
 
 }
