@@ -22,7 +22,10 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
   def dir = player.direction
   def plane = Vec2(-dir.y, dir.x)
 
-  def loadMap(mapFile:File) = map = new Map(mapFile)
+  def loadMap(mapFile:File) ={
+    map = new Map(mapFile)
+    player.resetPosition
+  } 
   
   def render(g: Graphics2D): BufferedImage = {
     val img = new BufferedImage(w, h, TYPE_INT_ARGB)

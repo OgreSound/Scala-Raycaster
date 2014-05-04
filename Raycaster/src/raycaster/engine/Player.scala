@@ -11,8 +11,10 @@ import scala.math._
  */
 class Player(private val renderer: Renderer) {
   val name = "player1"
-  private var pos = Vec2(1, 1)
-  private var dir = Vec2(1, 1)
+  private val startPos = Vec2(1, 1)
+  private val startDir = Vec2(1, 1)
+  private var pos = startPos
+  private var dir = startDir
   //  private val speed = 1
   //  private val rotSpeed = 90
 
@@ -46,5 +48,9 @@ class Player(private val renderer: Renderer) {
 
       dir = rotationR * dir
     }
+  }
+  def resetPosition = {
+    pos = startPos
+    dir = startDir
   }
 }
