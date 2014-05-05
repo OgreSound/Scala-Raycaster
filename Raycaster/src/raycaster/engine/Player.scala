@@ -15,27 +15,28 @@ class Player(private val renderer: Renderer) {
   private val startDir = Vec2(1, 1)
   private var pos = startPos
   private var dir = startDir
-  //  private val speed = 1
-  //  private val rotSpeed = 90
+  private val speed = 5
+  private val rotSpeed = 3
 
   def position = pos
 
   def direction = dir
 
   def move(time: Double, up: Boolean, down: Boolean, left: Boolean, right: Boolean): Unit = {
-    val moveSpeed = time * 5
-    val rotSpeed = time * 3
-    val rotationR = Trans2(cos(rotSpeed).toFloat, -sin(rotSpeed).toFloat, sin(rotSpeed).toFloat, cos(rotSpeed).toFloat)
-    val rotationL = Trans2(cos(rotSpeed).toFloat, sin(rotSpeed).toFloat, -sin(rotSpeed).toFloat, cos(rotSpeed).toFloat)
+    val movement = time * speed
+    val rotation = time * rotSpeed
+    val rotationR = Trans2(cos(rotation).toFloat, -sin(rotation).toFloat, sin(rotation).toFloat, cos(rotation).toFloat)
+    val rotationL = Trans2(cos(rotation).toFloat, sin(rotation).toFloat, -sin(rotation).toFloat, cos(rotation).toFloat)
     val map = renderer.world
+    
     if (up) {
-      val newPos = pos + dir * moveSpeed.toFloat
-      if (!map.inWall(newPos + dir * .5f)) {
+      val newPos = pos + dir * movement.toFloat
+      if (!map.inWall(newPos + dir * .5f)) { //checks that player stays at a minumum distance to a wall
         pos = newPos
       }
     }
     if (down) {
-      val newPos = pos + dir * (-moveSpeed.toFloat)
+      val newPos = pos + dir * (-movement.toFloat)
       if (!map.inWall(newPos - dir * .5f)) {
         pos = newPos
       }

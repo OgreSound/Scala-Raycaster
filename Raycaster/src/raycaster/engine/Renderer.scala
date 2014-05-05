@@ -19,7 +19,7 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
   val world = map
   val player = new Player(this)
   
-  def plane = Vec2(-player.direction.y, player.direction.x)
+  private def plane = Vec2(-player.direction.y, player.direction.x)
 
   def loadMap(mapFile:File) ={
     map = new Map(mapFile)

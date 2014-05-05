@@ -23,7 +23,7 @@ object Raycaster extends SimpleSwingApplication {
     private val defaultHeight = 720
     private var width = defaultWidth
 	private var height = defaultHeight
-	private var mapFile = new File("maps/RayCasterMapTextured.world")
+	private val mapFile = new File("maps/RayCasterMapTextured.world")
     private val path = mapFile.getCanonicalPath()
 	val caster = new RaycasterPanel(width,height,mapFile)
   val mainWindow = new MainFrame {
