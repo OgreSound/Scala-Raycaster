@@ -37,6 +37,7 @@ object Raycaster extends SimpleSwingApplication {
 	    contents += new Menu("Game"){
 	      contents += new MenuItem(Action("load a map")(openMap))
 	    }
+	    
 	  }
 	}
 	

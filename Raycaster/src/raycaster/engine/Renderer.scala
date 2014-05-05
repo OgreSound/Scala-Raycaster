@@ -14,13 +14,12 @@ import scala.math._
  *
  */
 class Renderer(private var w: Int, private var h: Int, private var mapFile: File) {
+
   private var map = new Map(mapFile)
   val world = map
   val player = new Player(this)
   
-  def pos = player.position
-  def dir = player.direction
-  def plane = Vec2(-dir.y, dir.x)
+  def plane = Vec2(-player.direction.y, player.direction.x)
 
   def loadMap(mapFile:File) ={
     map = new Map(mapFile)
@@ -32,11 +31,11 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
     val gr = img.createGraphics()
     gr.setColor(Color.black)
     gr.fillRect(0, 0, w, h)
-    var x = 0
-    while (x < w) {
+    
+    for(x <- 0 until w) {
       val cameraX: Float = 2f * x / w - 1
-      val rayPos = Vec2(pos.x, pos.y)
-      val rayDir = dir + (plane * cameraX)
+      val rayPos = Vec2(player.position.x, player.position.y)
+      val rayDir = player.direction + (plane * cameraX)
       //the position of the ray in the map coordinates
       var mapX: Int = rayPos.x.toInt
       var mapY: Int = rayPos.y.toInt
@@ -111,7 +110,6 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
       }
       gr.setColor(color)
       gr.drawLine(x, drawStart, x, drawEnd)
-      x += 1
     }
     img
   }

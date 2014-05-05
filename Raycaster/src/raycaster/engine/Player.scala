@@ -30,13 +30,13 @@ class Player(private val renderer: Renderer) {
     val map = renderer.world
     if (up) {
       val newPos = pos + dir * moveSpeed.toFloat
-      if (!map.inWall(newPos)) {
+      if (!map.inWall(newPos + dir * .5f)) {
         pos = newPos
       }
     }
     if (down) {
       val newPos = pos + dir * (-moveSpeed.toFloat)
-      if (!map.inWall(newPos)) {
+      if (!map.inWall(newPos - dir * .5f)) {
         pos = newPos
       }
     }
