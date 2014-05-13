@@ -41,5 +41,9 @@ case class Vec2( x: Float,  y: Float) {
     new Vec2(this.x - vector.x , this.y - vector.y)
   }
   
+    
+  def toInt: Vec2 = {
+    new Vec2(this.x.toInt.toFloat,this.y.toInt.toFloat)
+  }
   override def toString = this.x + " " + this.y
 }
