@@ -31,13 +31,13 @@ class Player(private val renderer: Renderer) {
     
     if (up) {
       val newPos = pos + dir * movement.toFloat
-      if (!map.inWall(newPos + dir * .5f)) { //checks that player stays at a minumum distance to a wall
+      if (!map.inWall(newPos + dir * .1f)) { //checks that player stays at a minumum distance to a wall
         pos = newPos
       }
     }
     if (down) {
       val newPos = pos + dir * (-movement.toFloat)
-      if (!map.inWall(newPos - dir * .5f)) {
+      if (!map.inWall(newPos - dir * .1f)) {
         pos = newPos
       }
     }
