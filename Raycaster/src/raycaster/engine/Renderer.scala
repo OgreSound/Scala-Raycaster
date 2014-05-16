@@ -9,33 +9,48 @@ import java.awt.Color
 import java.io.File
 import raycaster.math.Vec2
 import scala.math._
+import javax.imageio.ImageIO
+import java.awt.Image
 /**
  * @author OgreSound
  *
  */
 class Renderer(private var w: Int, private var h: Int, private var mapFile: File) {
-
   private var map = new Map(mapFile)
-  val world = map
+  def world = map
   val player = new Player(this)
-  
-  private def plane = Vec2(-player.direction.y, player.direction.x)
+  def pos = player.position
+  def dir = player.direction
+  def plane = Vec2(-dir.y, dir.x)
+  val textures: Array[BufferedImage] = Array.ofDim(8)
+  for (i <- textures.indices) {
+    i match {
+      case 0 => textures(i) = ImageIO.read(new File("pics/redbrick.png"))
+      case 1 => textures(i) = ImageIO.read(new File("pics/wood.png"))
+      case 2 => textures(i) = ImageIO.read(new File("pics/colorstone.png"))
+      case 3 => textures(i) = ImageIO.read(new File("pics/eagle.png"))
+      case 4 => textures(i) = ImageIO.read(new File("pics/bluestone.png"))
+      case 5 => textures(i) = ImageIO.read(new File("pics/mossy.png"))
+      case 6 => textures(i) = ImageIO.read(new File("pics/greystone.png"))
+      case 7 => textures(i) = ImageIO.read(new File("pics/purplestone.png"))
+    }
+  }
 
-  def loadMap(mapFile:File) ={
+  def loadMap(mapFile: File) = {
     map = new Map(mapFile)
     player.resetPosition
-  } 
-  
+  }
   def render(g: Graphics2D): BufferedImage = {
     val img = new BufferedImage(w, h, TYPE_INT_ARGB)
     val gr = img.createGraphics()
     gr.setColor(Color.black)
     gr.fillRect(0, 0, w, h)
-    
-    for(x <- 0 until w) {
+    var x = 0
+    while (x < w) {
       val cameraX: Float = 2f * x / w - 1
-      val rayPos = Vec2(player.position.x, player.position.y)
-      val rayDir = player.direction + (plane * cameraX)
+
+      val rayPos = Vec2(pos.x, pos.y)
+      val rayDir = dir + (plane * cameraX)
       //the position of the ray in the map coordinates
       var mapX: Int = rayPos.x.toInt
       var mapY: Int = rayPos.y.toInt
@@ -64,17 +79,19 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
         stepY = 1;
         sideDistY = (mapY + 1.0 - rayPos.y) * deltaDistY;
       }
-      //which side was hit: x = false , y = true
+      //which side was hit: x/horizontal = false , y/vertical = true
       var side = true
 
       var hit = false
       while (!hit) {
         if (sideDistX < sideDistY) {
           sideDistX += deltaDistX;
+
           mapX += stepX;
           side = false;
         } else {
           sideDistY += deltaDistY;
+
           mapY += stepY;
           side = true;
         }
@@ -86,30 +103,36 @@ class Renderer(private var w: Int, private var h: Int, private var mapFile: File
       } else {
         correctDist = abs((mapY - rayPos.y + (1 - stepY) / 2) / rayDir.y)
       }
-      val sliceHeight = abs((h) / correctDist).toInt
+      val sliceHeight = abs((h/2) / correctDist).toInt
 
       val drawStart = max(-sliceHeight / 2 + h / 2, 0)
       val drawEnd = min(sliceHeight / 2 + h / 2, h)
-      var color = map.gridVector(mapX)(mapY) match {
-        case 1 => Color.red
-        case 2 => Color.green
-        case 3 => Color.blue
-        case 4 => Color.orange
-        case 5 => Color.yellow
+      val mapValue = map.gridVector(mapX)(mapY)
+      val texture = textures(mapValue - 1)
+      val hitPos = rayPos + Vec2(sideDistX.toFloat, sideDistY.toFloat)
+      var wallX = side match {
+        case true => rayPos.x + ((mapY - rayPos.y + (1 - stepY) / 2) / rayDir.y) * rayDir.x
+        case false => rayPos.y + ((mapX - rayPos.x + (1 - stepX) / 2) / rayDir.x) * rayDir.y
       }
-      
-      var components = color.getComponents(Array(0f, 0f, 0f, 0f))
 
-      components = components.map(float => max(0, min(1, float * ((1 / correctDist) * 2))))
+      wallX -= wallX.toInt
+      val th = texture.getHeight()
+      val tw = texture.getWidth()
+      var sliceStart = (tw * wallX).toInt
 
-      color = new Color(components(0), components(1), components(2))
-      if (side) {
-        color = color.brighter()
-      } else {
-        color = color.darker()
+      if (rayDir.x > 0 && side == false || rayDir.y < 0 && side == true) {
+        sliceStart = tw - sliceStart - 1
       }
-      gr.setColor(color)
-      gr.drawLine(x, drawStart, x, drawEnd)
+      for (y <- drawStart until drawEnd) {
+        val d = y * 256 - h * 128 + sliceHeight * 128
+        val texY = ((d * th) / sliceHeight) / 256
+        
+
+        val color = texture.getRGB(sliceStart, texY.toInt)
+
+        img.setRGB(x, y, color)
+      }
+      x += 1
     }
     img
   }
